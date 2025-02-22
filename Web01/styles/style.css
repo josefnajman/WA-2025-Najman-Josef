@@ -20,14 +20,12 @@ body {
 
 h1 {
     color: white;
-    font-style: oblique;
-    text-align: center;
-    text-decoration: underline;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 h2 {
     color: white;
-    font-style: oblique;
+    font-family:'Times New Roman', Times, serif;
     text-align: center;
     text-decoration: underline;
 }
@@ -49,7 +47,7 @@ nav ul {
 }
 
 nav a {
-    background-color: #AEC3B0;
+    background-color: #758377;
     color: white;
     text-decoration: none;
     padding: 5px;
@@ -86,5 +84,39 @@ a:hover {
 
 footer {
     color: white;
-    font-style: italic;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+/* Gallery */
+
+.page-wrapper-gallery {
+    /* max-width: 80%; */
+    width: 80%;
+    margin: 0 auto; /* Zarovnání na střed */
+    background-color: #124559;
+    padding: 20px;
+
+}
+
+.grid-container-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+figcaption {
+    color: white;
+    font-family: 'Times New Roman', Times, serif;
+
+}
+
+figure {
+    background-color: #598392;
+    color: white;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+img {
+    border-radius: 10px;
 }
