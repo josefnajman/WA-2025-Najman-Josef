@@ -4,26 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Přidat úkol</title>
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/public/css/styles.css">
 </head>
 <body class="bg-light">
-
     <div class="container mt-5">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Seznam</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Přepnout navigaci">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <a class="navbar-brand" href="#">To-Do List</a>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="../../views/todo/todo_create.php">Přidat úkol</a>
+                            <a class="nav-link active" href="#">Přidat úkol</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="../../controllers/todo_list.php">Seznam úkolů</a>
@@ -32,6 +24,7 @@
                 </div>
             </div>
         </nav>
+        
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
@@ -39,8 +32,7 @@
                         <h2>Přidat nový úkol</h2>
                     </div>
                     <div class="card-body">
-                        <form action="../../controllers/ToDoController.php" method="post" enctype="multipart/form-data">
-                            
+                        <form action="../../controllers/ToDoController.php?action=create" method="post" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Název úkolu: <span class="text-danger">*</span></label>
                                 <input type="text" id="name" name="name" class="form-control" required>
@@ -48,22 +40,31 @@
 
                             <div class="mb-3">
                                 <label for="description" class="form-label">Popis: <span class="text-danger">*</span></label>
-                                <input type="text" id="description" name="description" class="form-control" required>
+                                <input id="description" name="description" class="form-control" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="date" class="form-label">Termín: <span class="text-danger">*</span></label>
-                                <input type="text" id="date" name="date" class="form-control" required>
+                                <input type="date" id="date" name="date" class="form-control" required>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="completion" class="form-label">Dokončení: <span class="text-danger">*</span></label>
-                                <input type="text" id="completion" name="completion" class="form-control" required>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" id="completion" name="completion" class="form-check-input">
+                                <label for="completion" class="form-check-label">Dokončeno</label>
                             </div>
 
                             <div class="mb-3">
                                 <label for="priority" class="form-label">Priorita: <span class="text-danger">*</span></label>
-                                <input type="number" id="priority" name="priority" class="form-control" required>
+                                <select id="priority" name="priority" class="form-select" required>
+                                    <option value="1">Nízká</option>
+                                    <option value="2" selected>Střední</option>
+                                    <option value="3">Vysoká</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="images" class="form-label">Přílohy:</label>
+                                <input type="file" id="images" name="images[]" class="form-control" multiple>
                             </div>
 
                             <button type="submit" class="btn btn-success w-100">Uložit úkol</button>
@@ -74,9 +75,6 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

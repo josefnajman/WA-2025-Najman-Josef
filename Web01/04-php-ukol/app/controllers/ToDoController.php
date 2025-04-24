@@ -1,54 +1,61 @@
 <?php
- require_once '../models/Database.php';
- require_once '../models/ToDo.php';
+require_once '../models/Database.php';
+require_once '../models/ToDo.php';
  
- class ToDoController {
-     private $db;
-     private $todoModel;
+class ToDoController {
+    private $db;
+    private $todoModel;
  
-     public function __construct() {
-         $database = new Database();
-         $this->db = $database->getConnection();
-         $this->todoModel = new ToDo($this->db);
-     }
+    public function __construct() {
+        $database = new Database();
+        $this->db = $database->getConnection();
+        $this->todoModel = new ToDo($this->db);
+    }
  
-     public function createToDo() {
-         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    public function createToDo() {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $name = htmlspecialchars($_POST['name']);
-            $desription = htmlspecialchars($_POST['description']);
+            $description = htmlspecialchars($_POST['description']);
             $date = htmlspecialchars($_POST['date']);
-            $completion = htmlspecialchars($_POST['completion']);
-            $priority = htmlspecialchars($_POST['priority'])
+            $completion = isset($_POST['completion']) ? 1 : 0;
+            $priority = htmlspecialchars($_POST['priority']);
              
             $imagePaths = [];
             if (!empty($_FILES['images']['name'][0])) {
-                 $uploadDir = '../public/images/';
-                 foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
-                     $filename = basename($_FILES['images']['name'][$key]);
-                     $targetPath = $uploadDir . $filename;
+                $uploadDir = '../public/images/';
+                if (!file_exists($uploadDir)) {
+                    mkdir($uploadDir, 0777, true);
+                }
+                
+                foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
+                    $filename = uniqid() . '_' . basename($_FILES['images']['name'][$key]);
+                    $targetPath = $uploadDir . $filename;
  
-                     if (move_uploaded_file($tmp_name, $targetPath)) {
-                         $imagePaths[] = '/public/images/' . $filename; 
+                    if (move_uploaded_file($tmp_name, $targetPath)) {
+                        $imagePaths[] = '/public/images/' . $filename;
                     }
                 }
             }
  
+            if ($this->todoModel->create($name, $description, $date, $completion, $priority, $imagePaths)) {
+                header("Location: todo_list.php");
+                exit();
+            } else {
+                echo "Chyba při ukládání údajů.";
+            }
+        }
+    }
  
-             if ($this->ToDoModel->create($name, $desription, $date, $completion, $priority, $imagePaths)) {
-                 header("Location: ../controllers/todo_list.php");
-                 exit();
-             } else {
-                 echo "Chyba při ukládání údajů.";
-             }
-         }
-     }
+    public function listToDo() {
+        $todo = $this->todoModel->getAll();
+        include '../views/todos/todo_list.php';
+    }
+}
  
-     public function listToDo() {
-         $todo = $this->ToDoModel->getAll();
-         include '../views/records/todo_list.php';
-     }
- }
- 
-// Volání metody při odeslání formuláře
+// Spuštění controlleru
 $controller = new ToDoController();
-$controller->createToDo();
+if (isset($_GET['action']) && $_GET['action'] == 'create') {
+    $controller->createToDo();
+} else {
+    $controller->listToDo();
+}

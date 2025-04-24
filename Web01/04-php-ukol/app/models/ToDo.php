@@ -1,5 +1,4 @@
 <?php
-
 class ToDo {
     private $db;
 
@@ -7,13 +6,9 @@ class ToDo {
         $this->db = $db;
     }
 
-    public function create($name, $desription, $date, $completion, $images) {
-        
-        // Dvojtečka označuje pojmenovaný parametr => Místo přímých hodnot se používají placeholdery.
-        // PDO je pak nahradí skutečnými hodnotami při volání metody execute().
-        // Chrání proti SQL injekci (bezpečnější než přímé vložení hodnot).
-        $sql = "INSERT INTO books (name, desription, date, completion, images) 
-                VALUES (:name, :description, :date, :completion, :images)";
+    public function create($name, $description, $date, $completion, $priority, $images) {
+        $sql = "INSERT INTO todo (name, description, date, completion, priority, images) 
+                VALUES (:name, :description, :date, :completion, :priority, :images)";
         
         $stmt = $this->db->prepare($sql);
         
@@ -22,10 +17,10 @@ class ToDo {
             ':description' => $description,
             ':date' => $date,
             ':completion' => $completion,
-            ':images' => json_encode($images) // Ukládání obrázků jako JSON
+            ':priority' => $priority,
+            ':images' => json_encode($images)
         ]);
     }
-}
 
     public function getAll() {
         $sql = "SELECT * FROM todo ORDER BY created_at DESC";
@@ -33,3 +28,4 @@ class ToDo {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+}
